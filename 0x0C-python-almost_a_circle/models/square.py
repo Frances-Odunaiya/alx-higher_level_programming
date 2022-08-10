@@ -1,81 +1,61 @@
 #!/usr/bin/python3
-"""
-class Square: iinherits from Rectangle
+"""This is the Square module.
+Contains the Square class that inherits from Rectangle.
 """
 from models.rectangle import Rectangle
 
 
 class Square(Rectangle):
-    """
-    class Square: inherits from Rectangle
-    """
+    """This class inherits from Rectangle and defines a Square object."""
 
     def __init__(self, size, x=0, y=0, id=None):
-        """
-        __init__ method
+        """Initializes the default attributes of the Base object.
+        Args:
+            size (int): the size of a square side.
+            x (int): the wanted horizontal (x) padding of the square.
+            y (int): the wanted vertical (y) padding of the square.
+            id (int): the wanted identifier of the Base object.
         """
         super().__init__(size, size, x, y, id)
 
+    def __str__(self):
+        """Overrides the default behaviour of the __str__ method."""
+        return "[Square] ({}) {}/{} - {}".format(
+            self.id, self.x, self.y, self.width)
+
+    # size attribute getter and setter.
     @property
     def size(self):
-        """
-        size property
-        """
+        """Get and Set the size attribute of the Square."""
         return self.width
 
     @size.setter
     def size(self, value):
-        """
-        size setter
-        """
         self.width = value
         self.height = value
 
-    def __str__(self):
-        """
-        __str__ method
-        """
-        return "[Square] ({}) {}/{} - {}".format(
-            self.id, self.x, self.y, self.width)
-
+    # Methods
     def update(self, *args, **kwargs):
+        """Updates the Square attributes.
+        Args:
+            args (list): attributes to be modified [id, size, x, y].
+            kwargs (dict): attributes to be modified.
         """
-        update method
-        """
-        if args:
-            self.id = args[0] if 0 < len(args) else self.id
-            self.size = args[1] if 1 < len(args) else self.size
-            self.x = args[2] if 2 < len(args) else self.x
-            self.y = args[3] if 3 < len(args) else self.x
+        dct = {}
+        if args is not None and len(args) > 0:
+            keys = ['id', 'size', 'x', 'y']
+            for i in range(len(args) if len(args) <= 4 else 4):
+                dct[keys[i]] = args[i]
         else:
-            for key, value in kwargs.items():
-                if key == "id":
-                    self.id = value
-                elif key == "size":
-                    self.size = value
-                elif key == "x":
-                    self.x = value
-                elif key == "y":
-                    self.y = value
-        return self
+            dct = kwargs
+
+        if len(dct) > 0:
+            for key, value in dct.items():
+                if key == 'id' and value is None:
+                    self.__init__(self.size, self.x, self.y)
+                else:
+                    setattr(self, key, value)
 
     def to_dictionary(self):
-        """
-        to_dictionary method
-        """
-        return {
-            "id": self.id,
-            "size": self.size,
-            "x": self.x,
-            "y": self.y
-        }
-
-    @classmethod
-    def create(cls, **kwargs):
-        """
-        create method
-        """
-        if "x" not in kwargs or "y" not in kwargs:
-            kwargs["x"] = 0
-            kwargs["y"] = 0
-        return cls(**kwargs)
+        """Returns the dictionary representation of a Square"""
+        return {'id': self.id, 'size': self.size, 'x': self.x, 'y': self.y}
